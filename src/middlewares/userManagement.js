@@ -1,10 +1,16 @@
 const { addUser, getUserByUsername } = require("../db/queries.js");
 
 async function isUserExisting(req, res, next) {
-  const userData = await getUserByUsername(req.body.username);
-  if (userData.length > 0) {
-    return res.render("register", { error: "Username is already taken" });
+  try {
+    const userData = await getUserByUsername(req.body.username);
+    if (userData.length > 0) {
+      return res.render("register", { error: "Username is already taken" });
+    }
+  } catch (error) {
+    console.error("Fehler beim Überprüfen des Benutzers:", error);
+    return res.render("register", { error: "Error checking user existence" });
   }
+
   next();
 }
 
@@ -13,7 +19,7 @@ async function addUserToDB(req, res, next) {
     await addUser({
       username: req.body.username,
       email: req.body.email,
-      password_hash: req.hash,
+      password_hash: req.body.hash,
     });
   } catch (error) {
     console.error("Fehler beim Hinzufügen des Benutzers:", error);

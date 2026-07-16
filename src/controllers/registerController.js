@@ -3,7 +3,7 @@ function showRegister(req, res) {
 }
 
 function handleRegister(req, res) {
-  res.send("Registrierung erfolgreich!");
+  res.redirect("/home");
 }
 
 module.exports = { showRegister, handleRegister };

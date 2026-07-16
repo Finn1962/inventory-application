@@ -3,7 +3,7 @@ function showLogin(req, res) {
 }
 
 function handleLogin(req, res) {
-  res.send("eingeloggt");
+  res.redirect("/home");
 }
 
 module.exports = { showLogin, handleLogin };

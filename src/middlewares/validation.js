@@ -5,7 +5,7 @@ const validateLogin = [
   body("password").notEmpty().withMessage("Password can not be empty."),
 ];
 
-function handleValidationErrors(req, res, next) {
+function handleLoginValidationErrors(req, res, next) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -52,7 +52,7 @@ function handleRegisterValidationErrors(req, res, next) {
 
 module.exports = {
   validateLogin,
-  handleValidationErrors,
+  handleLoginValidationErrors,
   validateRegister,
   handleRegisterValidationErrors,
 };

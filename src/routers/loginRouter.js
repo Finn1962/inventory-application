@@ -1,10 +1,10 @@
 const express = require("express");
 const loginRouter = express.Router();
 const { showLogin, handleLogin } = require("../controllers/loginController.js");
-const { hashPasswort, authenticateUser } = require("../middlewares/hash.js");
+const { authenticateUser } = require("../middlewares/hash.js");
 const {
   validateLogin,
-  handleValidationErrors,
+  handleLoginValidationErrors,
 } = require("../middlewares/validation.js");
 
 loginRouter.get("/", showLogin);
@@ -12,7 +12,7 @@ loginRouter.get("/", showLogin);
 loginRouter.post(
   "/",
   validateLogin,
-  handleValidationErrors,
+  handleLoginValidationErrors,
   authenticateUser,
   handleLogin,
 );
