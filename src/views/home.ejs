@@ -6,12 +6,25 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>
-      Welcome,
-      <%= user.username %>!
-    </h1>
     <a href="/home/logout">
       <button>Logout</button>
     </a>
+
+    <a href="/products/new">
+      <button>new product</button>
+    </a>
+
+    <h1>
+      Welcome,
+      <%= username %>!
+    </h1>
+
+    <% products.forEach((product)=> { %>
+    <p><%= product.name %></p>
+    <p><%= product.description %></p>
+    <p><%= product.price %></p>
+    <p><%= product.ratin %></p>
+    <p><%= product.brand %></p>
+    <% }); %>
   </body>
 </html>

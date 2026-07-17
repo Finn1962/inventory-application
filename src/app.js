@@ -11,6 +11,7 @@ const session = require("express-session");
 const { loginRouter } = require("./routers/loginRouter.js");
 const { registerRouter } = require("./routers/registerRouter.js");
 const { homeRouter } = require("./routers/homeRouter.js");
+const { productsRouter } = require("./routers/productsRouter.js");
 
 const app = express();
 
@@ -34,9 +35,10 @@ app.use(
 );
 
 // Routen
-app.use("/login", loginRouter);
-app.use("/register", registerRouter);
 app.get("/", (req, res) => res.redirect("/home"));
 app.use("/home", homeRouter);
+app.use("/login", loginRouter);
+app.use("/register", registerRouter);
+app.use("/products", productsRouter);
 
 module.exports = { app };

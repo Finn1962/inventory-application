@@ -1,5 +1,5 @@
 const request = require("supertest");
-const { app } = require("../app");
+const { app } = require("../app.js");
 
 const { getUserByUsername } = require("../db/queries.js");
 
@@ -32,8 +32,6 @@ describe("POST /login", () => {
       username: "testuser",
       password: "wrong_password",
     });
-
-    console.log(response.text);
 
     expect(response.statusCode).toBe(200);
     expect(response.text).toContain("Invalid username or password");

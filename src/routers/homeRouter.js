@@ -2,16 +2,36 @@ const express = require("express");
 
 const homeRouter = express.Router();
 
-const {
-  showHome,
-  redirectToLogin,
-} = require("../controllers/homeController.js");
+const { getAllProductsByUserId } = require("../db/queries.js");
 
-const { isAuthenticated } = require("../middlewares/isAuthenticated.js");
+homeRouter.get(
+  "/",
+  (req, res, next) => {
+    if (!req.session.user) return res.redirect("/login");
+    next();
+  },
 
-const { clearSession } = require("../middlewares/clearSession.js");
+  async (req, res) => {
+    res.render("home", {
+      username: req.session.user.username,
+      products: await getAllProductsByUserId(req.session.user.id),
+    });
+  },
+);
 
-homeRouter.get("/", isAuthenticated, showHome);
-homeRouter.get("/logout", clearSession, redirectToLogin);
+homeRouter.get(
+  "/logout",
+
+  (req, res) => {
+    req.session.destroy((error) => {
+      if (error) {
+        return res.status(500).send("Error clearing session");
+      }
+
+      res.clearCookie("connect.sid");
+      res.redirect("/login");
+    });
+  },
+);
 
 module.exports = { homeRouter };

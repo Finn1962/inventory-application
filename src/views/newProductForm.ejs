@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <a href="/home">
+      <button>back</button>
+    </a>
+    <h1>neues product</h1>
+
+    <form action="/products/new" method="POST">
+      <label for="name" maxLen>Name</label>
+      <input
+        type="text"
+        id="name"
+        ,
+        name="name"
+        minlength="2"
+        maxlength="255"
+        required
+      />
+      <label for="brand">Brand</label>
+      <input
+        type="brand"
+        id="brand"
+        ,
+        name="brand"
+        minlength="2"
+        maxlength="255"
+      />
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        ,
+        name="description"
+        rows="6"
+        cols="50"
+      ></textarea>
+      <label for="price">Price</label>
+      <input
+        type="number"
+        id="price"
+        ,
+        name="price"
+        step="any"
+        inputmode="decimal"
+        required
+      />
+      <button type="submit">create</button>
+    </form>
+  </body>
+</html>

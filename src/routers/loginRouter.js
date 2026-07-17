@@ -1,20 +1,26 @@
 const express = require("express");
+
 const loginRouter = express.Router();
-const { showLogin, handleLogin } = require("../controllers/loginController.js");
+
 const { authenticateUser } = require("../middlewares/hash.js");
+
 const {
   validateLogin,
   handleLoginValidationErrors,
 } = require("../middlewares/validation.js");
 
-loginRouter.get("/", showLogin);
+loginRouter.get("/", (req, res) => {
+  res.render("login", { error: "" });
+});
 
 loginRouter.post(
   "/",
   validateLogin,
   handleLoginValidationErrors,
   authenticateUser,
-  handleLogin,
+  (req, res) => {
+    res.redirect("/home");
+  },
 );
 
 module.exports = { loginRouter };
