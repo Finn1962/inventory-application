@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script src="/deleteForm.js" defer></script>
+    <link rel="stylesheet" href="/home.css" />
   </head>
   <body>
     <a href="/home/logout">
@@ -19,7 +21,34 @@
       <%= username %>!
     </h1>
 
-    <% products.forEach((product)=> { %>
+    <% products.forEach((product, index)=> { %>
+    <button
+      class="show-delete-form-button"
+      id="show_delete_form_button"
+      data-index="<%=index%>"
+    >
+      Delete
+    </button>
+
+    <form
+      method="POST"
+      action="/products/delete"
+      id="delete_form_<%=index%>"
+      class="delete-form"
+    >
+      <input type="hidden" name="product_id" value="<%=product.id%>" />
+      <p>Do you really want to delete?</p>
+      <button
+        type="button"
+        class="hide-delete-form-button"
+        id="hide_delete_form_button"
+        data-index="<%=index%>"
+      >
+        Stop
+      </button>
+      <button type="submit">Delete</button>
+    </form>
+
     <p><%= product.name %></p>
     <p><%= product.description %></p>
     <p><%= product.price %></p>

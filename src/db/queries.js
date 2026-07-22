@@ -8,7 +8,7 @@ async function getUserByUsername(username) {
     );
     return rows;
   } catch (error) {
-    console.error("Error getting user:", error);
+    console.error(error);
     throw error;
   }
 }
@@ -20,32 +20,20 @@ async function addUser({ username, email, password_hash }) {
       [username, email, password_hash],
     );
   } catch (error) {
-    console.error("Error adding user:", error);
+    console.error(error);
     throw error;
   }
 }
 
 async function addProduct({ name, description, price, user_id, brand }) {
   try {
-    await pool.query(
-      "insert into products (name , description, price, user_id, brand) VALUES ($1, $2, $3, $4, $5)",
+    const { rows } = await pool.query(
+      "insert into products (name , description, price, user_id, brand) VALUES ($1, $2, $3, $4, $5) RETURNING id",
       [name, description, price, user_id, brand],
     );
+    return rows[0].id;
   } catch (error) {
-    console.error("Error adding product:", error);
-    throw error;
-  }
-}
-
-async function getProductByName({ user_id, product_name }) {
-  try {
-    const { rows } = await pool.query(
-      "SELECT * FROM products WHERE user_id = ($1) AND name = ($2)",
-      [user_id, product_name],
-    );
-    return rows;
-  } catch (error) {
-    console.error("Error getting all products from user:", error);
+    console.error(error);
     throw error;
   }
 }
@@ -58,7 +46,31 @@ async function getAllProductsByUserId(user_id) {
     );
     return rows;
   } catch (error) {
-    console.error("Error getting all products from user:", error);
+    console.error(error);
+    throw error;
+  }
+}
+
+async function removeProduct({ user_id, product_id }) {
+  try {
+    await pool.query(
+      "DELETE FROM products WHERE user_id = ($1) AND id = ($2)",
+      [user_id, product_id],
+    );
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+async function addInternImageUrl(url, product_id) {
+  try {
+    await pool.query(
+      "INSERT INTO intern_image_urls (url, product_id) VALUES (($1), ($2))",
+      [url, product_id],
+    );
+  } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -67,6 +79,7 @@ module.exports = {
   getUserByUsername,
   addUser,
   addProduct,
-  getProductByName,
   getAllProductsByUserId,
+  removeProduct,
+  addInternImageUrl,
 };

@@ -11,12 +11,11 @@
     </a>
     <h1>neues product</h1>
 
-    <form action="/products/new" method="POST">
+    <form action="/products/new" method="POST" enctype="multipart/form-data">
       <label for="name" maxLen>Name</label>
       <input
         type="text"
         id="name"
-        ,
         name="name"
         minlength="2"
         maxlength="255"
@@ -24,9 +23,8 @@
       />
       <label for="brand">Brand</label>
       <input
-        type="brand"
+        type="text"
         id="brand"
-        ,
         name="brand"
         minlength="2"
         maxlength="255"
@@ -34,16 +32,16 @@
       <label for="description">Description</label>
       <textarea
         id="description"
-        ,
         name="description"
         rows="6"
         cols="50"
       ></textarea>
+      <label for="images">images</label>
+      <input type="file" id="images" name="images" accept="image/*" multiple />
       <label for="price">Price</label>
       <input
         type="number"
         id="price"
-        ,
         name="price"
         step="any"
         inputmode="decimal"
@@ -51,5 +49,9 @@
       />
       <button type="submit">create</button>
     </form>
+
+    <%if (error !== "") {%>
+    <p><%=error%></p>
+    <%}%>
   </body>
 </html>
