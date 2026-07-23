@@ -1,4 +1,14 @@
-const pool = require("./pool.js");
+const path = require("path");
+
+require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
+
+console.log("DB URL ist:", process.env.DATABASE_URL);
+
+const { Pool } = require("pg");
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
 async function getUserByUsername(username) {
   try {
@@ -38,6 +48,18 @@ async function addProduct({ name, description, price, user_id, brand }) {
   }
 }
 
+async function removeProduct({ user_id, product_id }) {
+  try {
+    await pool.query(
+      "DELETE FROM products WHERE user_id = ($1) AND id = ($2)",
+      [user_id, product_id],
+    );
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 async function getAllProductsByUserId(user_id) {
   try {
     const { rows } = await pool.query(
@@ -51,22 +73,10 @@ async function getAllProductsByUserId(user_id) {
   }
 }
 
-async function removeProduct({ user_id, product_id }) {
+async function addInternImageUrl({ url, product_id }) {
   try {
     await pool.query(
-      "DELETE FROM products WHERE user_id = ($1) AND id = ($2)",
-      [user_id, product_id],
-    );
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-async function addInternImageUrl(url, product_id) {
-  try {
-    await pool.query(
-      "INSERT INTO intern_image_urls (url, product_id) VALUES (($1), ($2))",
+      "INSERT INTO intern_image_urls (url, product_id) VALUES ($1, $2)",
       [url, product_id],
     );
   } catch (error) {
@@ -79,7 +89,7 @@ module.exports = {
   getUserByUsername,
   addUser,
   addProduct,
-  getAllProductsByUserId,
   removeProduct,
+  getAllProductsByUserId,
   addInternImageUrl,
 };

@@ -10,7 +10,6 @@ async function uploadImage(file) {
       });
 
     if (error) {
-      console.error("FEHLER!!");
       throw new Error(error);
     } else {
       return data.path;

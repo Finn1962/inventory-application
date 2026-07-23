@@ -28,6 +28,13 @@ productsRouter.post(
 
   async (req, res, next) => {
     try {
+      let imageUrls = [];
+      if (req.files && req.files.length > 0) {
+        imageUrls = await Promise.all(
+          req.files.map((file) => uploadImage(file)),
+        );
+      }
+
       const productId = await addProduct({
         name: req.body.name,
         description: req.body.description,
@@ -36,16 +43,17 @@ productsRouter.post(
         brand: req.body.brand,
       });
 
-      //console.log("id ist: ", productId);
-
-      if (req.files && req.files.length > 0) {
+      if (imageUrls.length > 0) {
         await Promise.all(
-          req.files.map(async (file) => {
-            const internImageUrl = await uploadImage(file);
-            await addInternImageUrl(internImageUrl, productId);
-          }),
+          imageUrls.map((url) =>
+            addInternImageUrl({
+              url: url,
+              product_id: productId,
+            }),
+          ),
         );
       }
+
       next();
     } catch (error) {
       error;
@@ -56,7 +64,6 @@ productsRouter.post(
   },
 
   (req, res) => {
-    console.log("Erfolg");
     res.redirect("/home");
   },
 );
