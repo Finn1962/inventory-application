@@ -33,22 +33,20 @@ async function getImageUrl(filePath) {
   }
 }
 
-/*
-const jpegBild = {
-  fieldname: "images",
-  originalname: "Frau mit Lampe.png",
-  encoding: "7bit",
-  mimetype: "image/png",
-  buffer: Buffer.from("fake-image-data"),
-  size: 35148989,
-};
+async function deleteImage(filePath) {
+  const { data, error } = await supabase.storage
+    .from("product-images")
+    .remove(filePath);
 
-uploadImage(jpegBild).then(() => {
-  console.log("upload vertig");
-  getImageUrl("public/Frau mit Lampe.png");
-});*/
+  if (error) {
+    throw new Error(error);
+  } else {
+    return data.path;
+  }
+}
 
 module.exports = {
   uploadImage,
   getImageUrl,
+  deleteImage,
 };

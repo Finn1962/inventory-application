@@ -2,8 +2,6 @@ const path = require("path");
 
 require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
 
-console.log("DB URL ist:", process.env.DATABASE_URL);
-
 const { Pool } = require("pg");
 
 const pool = new Pool({
@@ -85,6 +83,19 @@ async function addInternImageUrl({ url, product_id }) {
   }
 }
 
+async function getInternUrl(product_id) {
+  try {
+    const { rows } = await pool.query(
+      "SELECT (url) FROM intern_image_urls WHERE product_id = ($1)",
+      [product_id],
+    );
+    return rows[0].url;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 module.exports = {
   getUserByUsername,
   addUser,
@@ -92,4 +103,6 @@ module.exports = {
   removeProduct,
   getAllProductsByUserId,
   addInternImageUrl,
+  getInternUrl,
+  pool,
 };

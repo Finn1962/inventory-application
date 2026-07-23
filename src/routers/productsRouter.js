@@ -5,25 +5,27 @@ const multer = require("multer");
 const productsRouter = express.Router();
 
 const {
-  addProduct,
   removeProduct,
+  getInternUrl,
+  addProduct,
   addInternImageUrl,
 } = require("../db/queries.js");
 
+const { checkLogin } = require("../middlewares/checkLogin.js");
+
 const {
+  deleteImage,
   uploadImage,
-  //getImageUrl,
 } = require("../supabase/supabaseController.js");
 
 const upload = multer({ storage: multer.memoryStorage() }).array("images");
 
-productsRouter.get("/new", (req, res) => {
+productsRouter.get("/new", checkLogin, (req, res) => {
   res.render("newProductForm", { error: "" });
 });
 
 productsRouter.post(
   "/new",
-
   upload,
 
   async (req, res, next) => {
@@ -70,11 +72,19 @@ productsRouter.post(
 
 productsRouter.post(
   "/delete",
+
   async (req, res, next) => {
-    removeProduct({
-      user_id: req.session.user.id,
-      product_id: req.body.product_id,
-    }).then(() => next());
+    try {
+      const internImageUrl = await getInternUrl(req.body.product_id);
+      await deleteImage(internImageUrl);
+      await removeProduct({
+        user_id: req.session.user.id,
+        product_id: req.body.product_id,
+      });
+      next();
+    } catch {
+      res.redirect("/home?error=errorDeleteProduct");
+    }
   },
   (req, res) => {
     res.redirect("/home");
