@@ -108,6 +108,19 @@ async function addCategory({ name, user_id }) {
   }
 }
 
+async function removeCategory({ user_id, category_id }) {
+  try {
+    await pool.query(
+      "DELETE FROM categorys WHERE user_id = ($1) AND id = ($2)",
+      [user_id, category_id],
+    );
+    console.log("ERFOLGREICH ENTFERNT!");
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 module.exports = {
   getUserByUsername,
   addUser,
@@ -117,5 +130,6 @@ module.exports = {
   addInternImageUrl,
   getInternUrl,
   addCategory,
+  removeCategory,
   pool,
 };
