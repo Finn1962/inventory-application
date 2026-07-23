@@ -96,6 +96,18 @@ async function getInternUrl(product_id) {
   }
 }
 
+async function addCategory({ name, user_id }) {
+  try {
+    await pool.query("INSERT INTO categorys (user_id, name) VALUES ($1, $2)", [
+      user_id,
+      name,
+    ]);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 module.exports = {
   getUserByUsername,
   addUser,
@@ -104,5 +116,6 @@ module.exports = {
   getAllProductsByUserId,
   addInternImageUrl,
   getInternUrl,
+  addCategory,
   pool,
 };

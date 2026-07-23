@@ -12,6 +12,7 @@ const { loginRouter } = require("./routers/loginRouter.js");
 const { registerRouter } = require("./routers/registerRouter.js");
 const { homeRouter } = require("./routers/homeRouter.js");
 const { productsRouter } = require("./routers/productsRouter.js");
+const { categorysRouter } = require("./routers/categoryRouter.js");
 
 const app = express();
 
@@ -40,5 +41,6 @@ app.use("/home", homeRouter);
 app.use("/login", loginRouter);
 app.use("/register", registerRouter);
 app.use("/products", productsRouter);
+app.use("/categorys", categorysRouter);
 
 module.exports = { app };
